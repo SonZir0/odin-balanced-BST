@@ -20,6 +20,8 @@ export default class BinTree {
 
     insert(value, currentNode = this.root) {
         // If the tree is empty, return a new node
+        if (this.root === null) this.root = new Node(value);
+        // Base case
         if (currentNode === null) return new Node(value);
 
         // Otherwise, recur down the tree
@@ -67,6 +69,7 @@ export default class BinTree {
         return currentNode;
     }
 
+    // function to find smallest data/value in the subtree
     minValue(node) {
         let minv = node.data;
         while (node.left !== null) {
@@ -74,6 +77,59 @@ export default class BinTree {
             node = node.left;
         }
         return minv;
+    }
+
+    levelOrder(callbackFn = null) {
+        const queue = [this.root];
+        for (let i = 0; i < queue.length; i++) {
+            if (queue[i].left) queue.push(queue[i].left);
+            if (queue[i].right) queue.push(queue[i].right);
+        }
+
+        if (callbackFn) queue.forEach((node) => callbackFn(node));
+        else return queue.map((node) => node.data);
+    }
+
+    preOrder(callbackFn, currentNode = this.root) {
+        if (!currentNode) return [];
+
+        let tempArr = [];
+        if (!callbackFn) {
+            tempArr.push(currentNode.data);
+        } else {
+            callbackFn(currentNode);
+        }
+        tempArr = tempArr.concat(this.preOrder(callbackFn, currentNode.left));
+        tempArr = tempArr.concat(this.preOrder(callbackFn, currentNode.right));
+        return tempArr;
+    }
+
+    inOrder(callbackFn, currentNode = this.root) {
+        if (!currentNode) return [];
+
+        let tempArr = [];
+        tempArr = tempArr.concat(this.inOrder(callbackFn, currentNode.left));
+        if (!callbackFn) {
+            tempArr.push(currentNode.data);
+        } else {
+            callbackFn(currentNode);
+        }
+        tempArr = tempArr.concat(this.inOrder(callbackFn, currentNode.right));
+        return tempArr;
+    }
+
+    postOrder(callbackFn, currentNode = this.root) {
+        if (!currentNode) return [];
+
+        let tempArr = [];
+        tempArr = tempArr.concat(this.postOrder(callbackFn, currentNode.left));
+        tempArr = tempArr.concat(this.postOrder(callbackFn, currentNode.right));
+        if (!callbackFn) {
+            tempArr.push(currentNode.data);
+        } else {
+            callbackFn(currentNode);
+        }
+        return tempArr;
     }
 }
 
