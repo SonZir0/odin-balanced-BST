@@ -17,6 +17,64 @@ export default class BinTree {
 
         return root;
     }
+
+    insert(value, currentNode = this.root) {
+        // If the tree is empty, return a new node
+        if (currentNode === null) return new Node(value);
+
+        // Otherwise, recur down the tree
+        if (value < currentNode.data)
+            currentNode.left = this.insert(value, currentNode.left);
+        else if (value > currentNode.data)
+            currentNode.right = this.insert(value, currentNode.right);
+
+        // return the (unchanged) node pointer
+        return currentNode;
+    }
+
+    deleteNode(value, currentNode = this.root) {
+        if (currentNode === null) return currentNode;
+
+        // If the key to be deleted is smaller than the root's data, then it lies in the left subtree
+        if (value < currentNode.data)
+            currentNode.left = this.deleteNode(value, currentNode.left);
+        // If the key to be deleted is greater than the root's data, then it lies in the right subtree
+        else if (value > currentNode.data)
+            currentNode.right = this.deleteNode(value, currentNode.right);
+        // If key is same as root's data, then this is the node to be deleted
+        else {
+            // Node with only one child or no child
+
+            if (currentNode.left === null) {
+                // checks for root only needed to re-assign root to new node in case there is only one child
+                if (currentNode === this.root) this.root = currentNode.right;
+                return currentNode.right;
+            } else if (currentNode.right === null) {
+                if (currentNode === this.root) this.root = currentNode.left;
+                return currentNode.left;
+            }
+
+            // Node with two children: Get the inorder successor (smallest in the right subtree)
+            currentNode.data = this.minValue(currentNode.right);
+
+            // Delete the inorder successor in right subtree
+            currentNode.right = this.deleteNode(
+                currentNode.data,
+                currentNode.right
+            );
+        }
+
+        return currentNode;
+    }
+
+    minValue(node) {
+        let minv = node.data;
+        while (node.left !== null) {
+            minv = node.left.data;
+            node = node.left;
+        }
+        return minv;
+    }
 }
 
 function prepareArr(arr) {
