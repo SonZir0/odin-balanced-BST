@@ -131,6 +131,33 @@ export default class BinTree {
         }
         return tempArr;
     }
+
+    // find a node and call calcHeight (if it's in the tree)
+    height(key = this.root.data, currentNode = this.root) {
+        if (!currentNode) return -1;
+
+        if (key < currentNode.data) return this.height(key, currentNode.left);
+        else if (key > currentNode.data)
+            return this.height(key, currentNode.right);
+        else return this.calcHeightForSubtree(currentNode);
+    }
+
+    calcHeightForSubtree(currentNode = this.root) {
+        if (!currentNode) return -1;
+        let leftDist = this.calcHeightForSubtree(currentNode.left);
+        let rightDist = this.calcHeightForSubtree(currentNode.right);
+        return Math.max(0, leftDist + 1, rightDist + 1);
+    }
+
+    depth(key, currentNode = this.root, depth = 0) {
+        if (!currentNode) return -1;
+
+        if (key < currentNode.data)
+            return this.depth(key, currentNode.left, depth + 1);
+        else if (key > currentNode.data)
+            return this.depth(key, currentNode.right, depth + 1);
+        else return depth;
+    }
 }
 
 function prepareArr(arr) {
