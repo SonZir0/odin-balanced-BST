@@ -1,6 +1,7 @@
 import BinTree from './binSearchTree.js';
 
-let testArr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+let testArr = [...new Array(25)].map(() => Math.floor(Math.random() * 100));
+
 let testTree = new BinTree(testArr);
 function testCallBack(node) {
     console.log(node.data);
@@ -20,30 +21,43 @@ globalThis.prettyPrint = (node, prefix = '', isLeft = true) => {
 };
 
 prettyPrint(testTree.root);
-
 globalThis.test = testTree;
 globalThis.testArr = testArr;
 
-console.log('Calling data-logging callback!\n');
-test.levelOrder(testCallBack);
+console.log('Is it a balanced tree?\n', testTree.isBalanced());
 
-console.log('Calling level order without callback!\n');
-console.log(test.levelOrder());
+console.log('Calling level order without callback!\n', test.levelOrder());
 
-console.log('Calling preOrder with logging callback!\n');
-test.preOrder(testCallBack);
+console.log('Calling preOrder() without callback!\n', test.preOrder());
 
-console.log('Calling preOrder() without callback!\n');
-console.log(test.preOrder());
+console.log('Calling inOrder() without callback!\n', test.inOrder());
 
-console.log('Calling inOrder with logging callback!\n');
-test.inOrder(testCallBack);
+console.log('Calling postOrder() without callback!\n', test.postOrder());
 
-console.log('Calling inOrder() without callback!\n');
-console.log(test.inOrder());
+console.log(
+    'Inserting new nodes with values: 1000, 200, -100, -10, -50, 350\n'
+);
+testTree.insert(1000);
+testTree.insert(200);
+testTree.insert(-100);
+testTree.insert(-10);
+testTree.insert(-50);
+testTree.insert(350);
+testTree.insert(-15);
+console.log('Here is our tree:\n');
+prettyPrint(testTree.root);
 
-console.log('Calling postOrder with logging callback!\n');
-test.postOrder(testCallBack);
+console.log('Is it still balanced?\n', testTree.isBalanced());
+console.log('Rebalance incoming!\n');
+testTree.rebalance();
+console.log('Is it balanced now?\n', testTree.isBalanced());
+console.log('Here is our tree:\n');
+prettyPrint(testTree.root);
 
-console.log('Calling postOrder() without callback!\n');
-console.log(test.postOrder());
+console.log('Calling level order without callback!\n', test.levelOrder());
+
+console.log('Calling preOrder() without callback!\n', test.preOrder());
+
+console.log('Calling inOrder() without callback!\n', test.inOrder());
+
+console.log('Calling postOrder() without callback!\n', test.postOrder());

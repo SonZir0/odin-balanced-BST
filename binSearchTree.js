@@ -176,9 +176,10 @@ export default class BinTree {
         else return depth;
     }
 
-    // uses core logic of calcHeight()
+    // uses core logic of calcHeight(). If balanced, converts height to true
     isBalanced() {
-        return this.calcHeightForSubtree(this.root, true);
+        if (this.calcHeightForSubtree(this.root, true) !== false) return true;
+        return false;
     }
 
     rebalance() {
