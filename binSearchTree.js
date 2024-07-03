@@ -142,11 +142,28 @@ export default class BinTree {
         else return this.calcHeightForSubtree(currentNode);
     }
 
-    calcHeightForSubtree(currentNode = this.root) {
+    /*  by default returns max distance to leafs (height) for a given node.
+        Pass "true" to check subtree for balance. Returns false if unbalance, height otherwise    */
+    calcHeightForSubtree(currentNode = this.root, checkBalance = false) {
         if (!currentNode) return -1;
-        let leftDist = this.calcHeightForSubtree(currentNode.left);
-        let rightDist = this.calcHeightForSubtree(currentNode.right);
-        return Math.max(0, leftDist + 1, rightDist + 1);
+        let leftDist = this.calcHeightForSubtree(
+            currentNode.left,
+            checkBalance
+        );
+        let rightDist = this.calcHeightForSubtree(
+            currentNode.right,
+            checkBalance
+        );
+
+        if (checkBalance) {
+            if (
+                Math.abs(leftDist - rightDist) > 1 ||
+                leftDist === false ||
+                rightDist === false
+            )
+                return false;
+        }
+        return Math.max(leftDist + 1, rightDist + 1);
     }
 
     depth(key, currentNode = this.root, depth = 0) {
@@ -157,6 +174,16 @@ export default class BinTree {
         else if (key > currentNode.data)
             return this.depth(key, currentNode.right, depth + 1);
         else return depth;
+    }
+
+    // uses core logic of calcHeight()
+    isBalanced() {
+        return this.calcHeightForSubtree(this.root, true);
+    }
+
+    rebalance() {
+        let nodeValArr = this.inOrder();
+        this.root = this.buildTree(nodeValArr, 0, nodeValArr.length - 1);
     }
 }
 
